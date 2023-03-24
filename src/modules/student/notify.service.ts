@@ -5,7 +5,7 @@ import { EmailSender } from './event/event.payload';
 
 @Injectable()
 export class NotifyService {
-  @OnEvent(events.EMAIL_SENDER)
+  @OnEvent(events.TEST_EVENT)
   handleSendEmailEvent(payload: EmailSender) {
     setTimeout(() => {
       console.log('Send notify to: ', payload.content);

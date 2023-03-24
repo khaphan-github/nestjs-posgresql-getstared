@@ -1,3 +1,3 @@
 export const events = {
-  EMAIL_SENDER: 'email.sendser',
+  TEST_EVENT: 'test.event',
 };

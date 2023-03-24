@@ -5,7 +5,7 @@ import { EmailSender } from './event/event.payload';
 
 @Injectable()
 export class LogerService {
-  @OnEvent(events.EMAIL_SENDER)
+  @OnEvent(events.TEST_EVENT)
   handleSendEmailEvent(payload: EmailSender) {
     console.log('Send email to: ', payload.email);
   }

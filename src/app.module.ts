@@ -10,9 +10,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV || 'dev'}`,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgres://fueitupq:sMOdoNC9YcDJvQ--LhNdYwVQ7nWLcxYI@rosie.db.elephantsql.com/fueitupq',
+      host: process.env.POSTGRESQL_IP,
+      port: parseInt(process.env.POSTGRESQL_PORT),
+      username: process.env.POSTGRESQL_USERNAME,
+      password: process.env.POSTGRESQL_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
     }),

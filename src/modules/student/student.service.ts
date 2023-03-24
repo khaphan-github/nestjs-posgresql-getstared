@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, map, Observable, switchMap } from 'rxjs';
-import { FindOneOptions, Repository } from 'typeorm';
+import { EntityManager, FindOneOptions, Repository } from 'typeorm';
 import { events } from './event/event.constant';
 import { EmailSender } from './event/event.payload';
 import { StudentEntity } from './models/student.entity';
@@ -13,6 +13,7 @@ export class StudentService {
     @InjectRepository(StudentEntity)
     private studentRepository: Repository<StudentEntity>,
     private eventEmitter: EventEmitter2,
+    private readonly entityManager: EntityManager,
   ) {}
 
   findAll(): Observable<StudentEntity[]> {
@@ -33,8 +34,8 @@ export class StudentService {
       email: 'phanhoangkha01@gmail.com',
       content: 'Test',
     };
-
-    this.eventEmitter.emit(events.EMAIL_SENDER, emailSender);
+    // Send Event
+    this.eventEmitter.emit(events.TEST_EVENT, emailSender);
     return studentEntity;
   }
 
@@ -46,5 +47,12 @@ export class StudentService {
 
   delete(id: number): Observable<void> {
     return from(this.studentRepository.delete(id)).pipe(map(() => undefined));
+  }
+
+  findAllUsingQuery(): Observable<StudentEntity[]> {
+    const query = `SELECT * FROM "public"."student_entity" LIMIT $1`;
+    const values = [100];
+    const result = from(this.entityManager.query(query, values));
+    return result;
   }
 }
